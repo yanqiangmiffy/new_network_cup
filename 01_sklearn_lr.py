@@ -9,7 +9,9 @@
 """
 from sklearn.linear_model.logistic import LogisticRegression
 from sklearn.model_selection import train_test_split,GridSearchCV
-from sklearn.metrics import roc_auc_score,mean_squared_error
+from sklearn.metrics import roc_auc_score,mean_squared_error,log_loss
+from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
+from sklearn.pipeline import Pipeline
 import pandas as pd
 import numpy as np
 from utils import load_data
@@ -38,10 +40,29 @@ def extract_feature(X, y):
     return X,sel
 
 
-def train():
+# 预测提交
+def predict(clf,pipeline):
+    eval_x = df_test.drop(['cust_id', 'cust_group'], axis=1, inplace=False)
+    eval_x = pipeline.fit_transform(eval_x)
+
+    submit_pred = clf.predict_proba(eval_x)
+    submit_pred = submit_pred[:, 1]  # 风险高的用户概率
+    df_test['pred_prob'] = submit_pred
+    df_test[['cust_id', 'pred_prob']].to_csv('result/submit.csv', index=False)
+
+
+def main():
     X = df_train.drop(['cust_id', 'y', 'cust_group'], axis=1, inplace=False)
     y = df_train['y']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train,X_test , y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    pipeline = Pipeline(steps=[
+        ('poly', PolynomialFeatures(degree=2)),
+        ('scaler', MinMaxScaler()),
+    ])
+    X_train=pipeline.fit_transform(X_train)
+    X_test=pipeline.fit_transform(X_test)
+
     print(X_train.shape, X_test.shape)
 
     # X_train=extract_feature(X_train,y_train)
@@ -51,26 +72,20 @@ def train():
     clf.fit(X_train, y_train)
     prob  = clf.predict_proba(X_test)
     pred = np.argmax(prob, axis=1)
-    print("mean_squared_error:",mean_squared_error(pred, y_test))
-    print("roc_auc_score：",roc_auc_score(pred, y_test))
+    print("mean_squared_error:", mean_squared_error(y_test, prob[:, 1]))
+    print("log_loss:", log_loss(y_test.astype(int), prob[:, 1]))
+    print("roc_auc_score：", roc_auc_score(y_test, prob[:, 1]))
     # high_danger_prob=prob[:, 1]
     # print(high_danger_prob)
 
     # print("调参")
     # tune_params(X_test, y_test)
-    return clf
+
+    predict(clf,pipeline)
+
+if __name__ == '__main__':
+    main()
 
 
-clf=train()
 
 
-# 预测提交
-def predict():
-    eval_x = df_test.drop(['cust_id', 'cust_group'], axis=1, inplace=False)
-    submit_pred = clf.predict_proba(eval_x)
-    submit_pred = submit_pred[:, 1] # 风险高的用户概率
-    df_test['pred_prob'] = submit_pred
-    df_test[['cust_id', 'pred_prob']].to_csv('result/submit.csv', index=False)
-
-
-predict()

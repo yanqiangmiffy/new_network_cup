@@ -19,7 +19,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score,mean_squared_error
+from sklearn.metrics import roc_auc_score,mean_squared_error,log_loss
 import pandas as pd
 import numpy as np
 
@@ -75,10 +75,11 @@ def train():
         print("traing..."+name)
         clf.fit(X_train, y_train)
 
-        prob  = clf.predict_proba(X_test)
+        prob  = clf.predict_proba(X_test).astype(float)
         pred = np.argmax(prob, axis=1)
-        print("mean_squared_error:",mean_squared_error(pred, y_test))
-        print("roc_auc_score：",roc_auc_score(pred, y_test))
+        print("mean_squared_error:",mean_squared_error(y_test,prob[:,1]))
+        print("log_loss:",log_loss(y_test.astype(int),prob[:,1]))
+        print("roc_auc_score：",roc_auc_score(y_test,prob[:,1]))
         # high_danger_prob=prob[:, 1]
         # print(high_danger_prob)
 
