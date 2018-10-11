@@ -12,6 +12,7 @@ from sklearn.model_selection import train_test_split,GridSearchCV
 from sklearn.metrics import roc_auc_score,mean_squared_error,log_loss
 from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
 from sklearn.pipeline import Pipeline
+from sklearn.decomposition import PCA
 import pandas as pd
 import numpy as np
 from utils import load_data
@@ -43,7 +44,7 @@ def extract_feature(X, y):
 # 预测提交
 def predict(clf,pipeline):
     eval_x = df_test.drop(['cust_id', 'cust_group'], axis=1, inplace=False)
-    eval_x = pipeline.fit_transform(eval_x)
+    # eval_x = pipeline.fit_transform(eval_x)
 
     submit_pred = clf.predict_proba(eval_x)
     submit_pred = submit_pred[:, 1]  # 风险高的用户概率
@@ -60,8 +61,8 @@ def main():
         ('poly', PolynomialFeatures(degree=2)),
         ('scaler', MinMaxScaler()),
     ])
-    X_train=pipeline.fit_transform(X_train)
-    X_test=pipeline.fit_transform(X_test)
+    # X_train=pipeline.fit_transform(X_train)
+    # X_test=pipeline.fit_transform(X_test)
 
     print(X_train.shape, X_test.shape)
 
