@@ -12,8 +12,8 @@ import numpy as np
 import lightgbm as lgb
 from utils import load_data
 from sklearn.model_selection import train_test_split
-
 df_train,df_test=load_data()
+
 
 def train():
     X = df_train.drop(['cust_id', 'y', 'cust_group'], axis=1, inplace=False)
@@ -54,6 +54,6 @@ def predict():
     print('Start predicting...')
     y_pred = gbm.predict(eval_x, num_iteration=gbm.best_iteration)
     df_test['pred_prob'] = y_pred
-    df_test[['cust_id', 'pred_prob']].to_csv('result/submit.csv', index=False)
+    df_test[['cust_id', 'pred_prob']].to_csv('result/02_lgb.csv', index=False)
 
 predict()

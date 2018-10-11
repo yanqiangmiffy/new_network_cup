@@ -8,19 +8,26 @@
 @Description:
 """
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import Imputer
 
-
-def load_data():
+def load_data(filter_flag=False):
     df_train=pd.read_csv('input/train_xy.csv') # 含有y
     df_test=pd.read_csv('input/test_all.csv') # 不含有y
-    # 去除异常值(-99)
-    n_row = len(df_train)
-    for col in df_train.columns:
-        cnt = (df_train[col] == -99).astype(int).sum()
-        if (float(cnt) / n_row) > 0.45:
-            df_train.drop([col], axis=1, inplace=True)
-            df_test.drop([col], axis=1, inplace=True)
-    print(df_train.shape,df_test.shape)
-    return df_train,df_test
+    if filter_flag:
+        # 去除异常值(-99)
+        n_row = len(df_train)
+        for col in df_train.columns:
+            cnt = (df_train[col] == -99).astype(int).sum()
+            if (float(cnt) / n_row) > 0.45:
+                df_train.drop([col], axis=1, inplace=True)
+                df_test.drop([col], axis=1, inplace=True)
+        print(df_train.shape,df_test.shape)
+        return df_train,df_test
+    else:
+        print(df_train.shape, df_test.shape)
+        return df_train,df_test
+
+
 
 

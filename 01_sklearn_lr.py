@@ -49,7 +49,7 @@ def predict(clf,pipeline):
     submit_pred = clf.predict_proba(eval_x)
     submit_pred = submit_pred[:, 1]  # 风险高的用户概率
     df_test['pred_prob'] = submit_pred
-    df_test[['cust_id', 'pred_prob']].to_csv('result/submit.csv', index=False)
+    df_test[['cust_id', 'pred_prob']].to_csv('result/01_sklearn_lr.csv', index=False)
 
 
 def main():
