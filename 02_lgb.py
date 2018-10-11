@@ -2,7 +2,7 @@
 # -*- coding:utf-8 _*-  
 """ 
 @Author:yanqiang 
-@File: 02_gbm.py
+@File: 02_lgb.py
 @Time: 2018/9/29 17:47
 @Software: PyCharm 
 @Description:

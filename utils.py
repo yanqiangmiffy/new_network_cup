@@ -22,3 +22,5 @@ def load_data():
             df_test.drop([col], axis=1, inplace=True)
     print(df_train.shape,df_test.shape)
     return df_train,df_test
+
+

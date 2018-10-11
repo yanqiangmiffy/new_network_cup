@@ -22,32 +22,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score,mean_squared_error,log_loss
 import pandas as pd
 import numpy as np
-
-
-def load_data():
-    df_train=pd.read_csv('input/train_xy.csv') # 含有y
-    df_test=pd.read_csv('input/test_all.csv') # 不含有y
-
-    # 去除异常值(-99)
-    n_row = len(df_train)
-    for col in df_train.columns:
-        cnt = (df_train[col] == -99).astype(int).sum()
-        if (float(cnt) / n_row) > 0.45:
-            df_train.drop([col], axis=1, inplace=True)
-            df_test.drop([col], axis=1, inplace=True)
-
-    print(df_train.shape,df_test.shape)
-
-    return df_train,df_test
-
+from utils import load_data
 
 df_train,df_test=load_data()
 
 
-
-
 def train():
-
     X = df_train.drop(['cust_id', 'y', 'cust_group'], axis=1, inplace=False)
     y = df_train['y']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -82,7 +62,6 @@ def train():
         print("roc_auc_score：",roc_auc_score(y_test,prob[:,1]))
         # high_danger_prob=prob[:, 1]
         # print(high_danger_prob)
-
 
 
 train()
