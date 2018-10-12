@@ -24,7 +24,7 @@ import pandas as pd
 import numpy as np
 from utils import load_data
 
-df_train,df_test=load_data()
+df_train,df_test=load_data(filter_flag=True)
 
 
 def train():

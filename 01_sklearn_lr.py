@@ -20,7 +20,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import Imputer
 
 
-df_train,df_test=load_data(filter_flag=True)
+df_train,df_test=load_data(filter_flag=True,process_flag=True)
 
 
 # 调整参数
@@ -45,9 +45,8 @@ def extract_feature(X, y):
 
 
 # 预测提交
-def predict(clf,pipeline):
+def predict(clf):
     eval_x = df_test.drop(['cust_id', 'cust_group'], axis=1, inplace=False)
-    eval_x = pipeline.transform(eval_x)
 
     submit_pred = clf.predict_proba(eval_x)
     submit_pred = submit_pred[:, 1]  # 风险高的用户概率
@@ -59,18 +58,7 @@ def main():
     X = df_train.drop(['cust_id', 'y', 'cust_group'], axis=1, inplace=False)
     y = df_train['y']
     X_train,X_test , y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    pipeline = Pipeline(steps=[
-        # ('poly', PolynomialFeatures(degree=2)),
-        # ('scaler', MinMaxScaler()),
-        ('imputer',Imputer(strategy="median")),
-        ('stand',StandardScaler()),
-    ])
-    X_train=pipeline.fit_transform(X_train)
-    X_test=pipeline.fit_transform(X_test)
-
     print(X_train.shape, X_test.shape)
-
     # X_train=extract_feature(X_train,y_train)
     clf=LogisticRegression(C=1.0,max_iter=100,random_state=10)
 
@@ -87,7 +75,7 @@ def main():
     # print("调参")
     # tune_params(X_test, y_test)
 
-    predict(clf,pipeline)
+    predict(clf)
 
 if __name__ == '__main__':
     main()

@@ -12,7 +12,7 @@ import numpy as np
 import lightgbm as lgb
 from utils import load_data
 from sklearn.model_selection import train_test_split
-df_train,df_test=load_data()
+df_train,df_test=load_data(filter_flag=True,process_flag=True)
 
 
 def train():
@@ -24,7 +24,7 @@ def train():
         'task': 'train',
         'boosting_type': 'gbdt',
         'objective': 'binary',
-        'metric': {'l2', 'auc'},
+        'metric': {'binary_logloss', 'auc'},
         # 'is_unbalance': True,
         'num_leaves': 31,
         'learning_rate': 0.05,

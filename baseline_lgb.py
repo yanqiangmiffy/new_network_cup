@@ -28,8 +28,6 @@ x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
 
-
-
 from lightgbm import LGBMClassifier
 clf = LGBMClassifier(n_jobs=-1,
                      n_estimators=200,
