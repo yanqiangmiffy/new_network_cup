@@ -48,9 +48,9 @@ def extract_feature(X, y):
 def predict(clf):
     eval_x = df_test.drop(['cust_id', 'cust_group'], axis=1, inplace=False)
 
-    submit_pred = clf.predict_proba(eval_x)
-    submit_pred = submit_pred[:, 1]  # 风险高的用户概率
-    df_test['pred_prob'] = submit_pred
+    eval_pred = clf.predict_proba(eval_x)
+    eval_pred = eval_pred[:, 1]  # 风险高的用户概率
+    df_test['pred_prob'] = eval_pred
     df_test[['cust_id', 'pred_prob']].to_csv('result/01_sklearn_lr.csv', index=False)
 
 

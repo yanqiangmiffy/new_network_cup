@@ -52,8 +52,8 @@ gbm=train()
 def predict():
     eval_x = df_test.drop(['cust_id', 'cust_group'], axis=1, inplace=False)
     print('Start predicting...')
-    y_pred = gbm.predict(eval_x, num_iteration=gbm.best_iteration)
-    df_test['pred_prob'] = y_pred
+    eval_pred = gbm.predict(eval_x, num_iteration=gbm.best_iteration)
+    df_test['pred_prob'] = eval_pred
     df_test[['cust_id', 'pred_prob']].to_csv('result/02_lgb.csv', index=False)
 
 predict()

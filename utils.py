@@ -10,6 +10,7 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler,LabelEncoder
 
+
 def load_data(filter_flag=False,process_flag=False):
     """
     加载数据，是否需要去除异常值
@@ -55,5 +56,5 @@ def load_data(filter_flag=False,process_flag=False):
     return df_train,df_test
 
 
-
+import seaborn
 
