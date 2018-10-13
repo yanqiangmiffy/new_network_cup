@@ -12,7 +12,9 @@ import numpy as np
 import lightgbm as lgb
 from utils import load_data
 from sklearn.model_selection import train_test_split
-df_train,df_test=load_data(filter_flag=True,process_flag=True)
+from sklearn.metrics import roc_auc_score
+
+df_train,df_test=load_data(filter_flag=True,process_flag=False)
 
 
 def train():
@@ -42,7 +44,8 @@ def train():
                     num_boost_round=20,
                     valid_sets=lgb_eval,
                     early_stopping_rounds=5)
-
+    y_pred=gbm.predict(X_test)
+    print(roc_auc_score(y_test,y_pred))
     return gbm
 
 gbm=train()

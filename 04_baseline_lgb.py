@@ -2,13 +2,21 @@ from utils import load_data
 from sklearn.model_selection import train_test_split
 from lightgbm import LGBMClassifier
 from sklearn.metrics import roc_auc_score
-df_train,df_test=load_data(filter_flag=True,process_flag=True)
+from imblearn.over_sampling import SMOTE
+from sklearn.metrics import roc_auc_score
+
+df_train,df_test=load_data(filter_flag=True,process_flag=False)
 
 
 def train():
     X = df_train.drop(['cust_id', 'y', 'cust_group'], axis=1, inplace=False)
     y = df_train['y']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    smote = SMOTE(random_state=42)
+    X_res, y_res = smote.fit_sample(X, y)
+
+    X_train, X_test, y_train, y_test = train_test_split(X_res, y_res, test_size=0.25, random_state=42)
+
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     clf = LGBMClassifier(n_jobs=-1,
                          n_estimators=200,
                          learning_rate=0.01,
@@ -22,7 +30,7 @@ def train():
                          min_child_weight=40,
                          )
     clf.fit(X_train, y_train)
-    prob = clf.predict_proba(X_test)
+    prob = clf.predict(X_test)
     print("roc_auc_score：", roc_auc_score(y_test, prob[:, 1]))
     return clf
 
