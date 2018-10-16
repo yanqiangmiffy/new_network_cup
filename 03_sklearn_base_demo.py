@@ -48,14 +48,13 @@ def train():
         RandomForestClassifier(oob_score=True),
         GradientBoostingClassifier(),
         AdaBoostClassifier(),
-        DecisionTreeClassifier()]
+        DecisionTreeClassifier(max_depth=3)]
     for name,clf in zip(names,classifiers):
         print("===="*20)
         print("traing..."+name)
         clf.fit(X_train, y_train)
 
         prob  = clf.predict_proba(X_test).astype(float)
-        print(prob)
         # pred = np.argmax(prob, axis=1)
         print("mean_squared_error:",mean_squared_error(y_test,prob[:,1]))
         print("log_loss:",log_loss(y_test.astype(int),prob[:,1]))

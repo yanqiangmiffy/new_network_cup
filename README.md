@@ -28,5 +28,6 @@ scaler = StandardScaler()
        
 - 模型集成
 ```text
-1. 将lgb和lr的结果相加求平均
+1. 将lgb和lr的结果相加求平均 0.739572
+2. 将lgb xgb lr的结果相加求平均 0.74183
 ```
