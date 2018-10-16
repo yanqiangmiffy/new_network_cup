@@ -43,13 +43,13 @@ def load_data(filter_flag=False,process_flag=False):
         # df_train[label_cols]=df_train[label_cols].apply(label_encoder.fit_transform)
         # df_test[label_cols]=df_train[label_cols].apply(label_encoder.fit_transform)
 
-        # df_train=pd.get_dummies(df_train,columns=label_cols)
-        # df_test=pd.get_dummies(df_test,columns=label_cols)
-        # print(set(list(df_train.columns))-set(list(df_test.columns)))
-        # print(set(list(df_test.columns))-set(list(df_train.columns)))
+        df_train=pd.get_dummies(df_train,columns=label_cols)
+        df_test=pd.get_dummies(df_test,columns=label_cols)
+        print(set(list(df_train.columns))-set(list(df_test.columns)))
+        print(set(list(df_test.columns))-set(list(df_train.columns)))
 
         # 数值特征处理
-        num_cols=list(df_train.loc[:,'x_1':].columns)
+        num_cols=list(df_train.loc[:,'x_1':'x_96'].columns)
         df_train[num_cols] = scaler.fit_transform(df_train[num_cols])
         df_test[num_cols] = scaler.transform(df_test[num_cols])
 
