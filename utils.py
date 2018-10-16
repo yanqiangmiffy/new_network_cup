@@ -54,9 +54,9 @@ def load_data(filter_flag=False,process_flag=False):
         df_test[num_cols] = scaler.transform(df_test[num_cols])
 
         # 异常值处理 Imputer-median 用特征列的中位数替换
-        imputer=Imputer(missing_values=-99,strategy='median')
-        df_train[num_cols]=imputer.fit_transform(df_train[num_cols])
-        df_test[num_cols]=imputer.transform(df_test[num_cols])
+        # imputer=Imputer(missing_values=-99,strategy='median')
+        # df_train[num_cols]=imputer.fit_transform(df_train[num_cols])
+        # df_test[num_cols]=imputer.transform(df_test[num_cols])
         print("df_train、df_test数据处理后数据维度:",df_train.shape, df_test.shape)
 
     return df_train,df_test

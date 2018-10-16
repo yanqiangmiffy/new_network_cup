@@ -14,7 +14,7 @@ from utils import load_data
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 
-df_train,df_test=load_data(filter_flag=True,process_flag=False)
+df_train,df_test=load_data(filter_flag=True,process_flag=True)
 
 
 def train():
